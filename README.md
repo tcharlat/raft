@@ -98,6 +98,9 @@ instance.is.commonVerb().then().catch();
 
 This last syntaxic sugar lets you easily create homonymic methods for each of your attribute getter setter and validate (or any other logic on) your model in one pass.
 
+### adaptors:  
+raft-decorator-localStorage  
+```bower install raft-decorator-localStorage --save ```  
 ## Todo
 
 - This.
