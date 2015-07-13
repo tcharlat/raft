@@ -21,6 +21,12 @@
 				** if a fields had a default value define in the model attributes default,
 				** sets the get-set to this value
 				*/
+
+				/*
+				** Since some logic has to be executed once at the creation of the constructor (sic),
+				** we should check that we are not executing unnecessary redundant construction instructions
+				** and kick some loops out of the constructor
+				*/
 				values = values || {};
 				for (var name in model.attributes) {
 					self[name] = getterSetter(values[name] || model.attributes[name].default);
@@ -83,7 +89,7 @@
 			/* !CONSTRUCTOR! */
 
 			/*
-			**
+			** Might not be the best way to manage a closure. We should definitely audit this at some point
 			*/
 			function isMethod (varName, methodName, method, getterSetter) {
 				return (function (_varName, _methodName, _method, _getterSetter) {
@@ -98,39 +104,47 @@
 				})(varName, methodName, method, getterSetter);
 			}
 
-	Class.prototype.is = {};
+			/*
+			** TODO :
+			** This object should be created only if there is at least one if method
+			*/
+			Class.prototype.is = {};
 
 			/* INSTANCE METHODS */
 
-			Class.prototype.save = function save () {
-				//
-				// return new Promise(function (resolve, reject) {
-				// 	localStorage.setItem(this._id(), 'test');
-				// });
-			};
-
-			Class.prototype.valid = function valid () {
-				//promise array =
-				//	for each getter setter, 
-				//
-				var array = [];
-
-				for (var name in model.attributes) {
-					array.push(this[name].is.valid());
+			Class.prototype.update = function (obj) {
+				for(var name in model.attributes) {
+					if (obj[name])
+						this[name](obj[name]);
 				}
-				return Promise.all(array);
+			};
+			Class.prototype.toJSON = function () {
+				var _obj = {};
+				for(var name in model.attributes) {
+					_obj[name] = this[name]();
+				}
+				return JSON.stringify(_obj);
 			};
 
+			/*
+			** This might be better defined as a custom model instance method
+			*/
 			Class.prototype.current = function current () {
 				Class.current = this;
 			};
 
 			/* ! INSTANCE METHODS ! */
-
+			/*
+			** Idem for this variable
+			*/
 			Class.current;
 
 			/* INSTANCE PRIVATE */
 
+			/*
+			** This function definition is highly unclear + it's not implemented.
+			** should be solved ASAP
+			*/
 			function load () {};
 
 			/* !INSTANCE PRIVATE! */
@@ -147,16 +161,22 @@
 
 			Class.create = function create(attributes) {
 				return new Promise(function(resolve) {
+					/*
+					** Should async creation fail ? under wich condition ?
+					*/
+					//if (someCheckIsNotPassing(attributes) || somethingIsNotRight())
+					//	reject('clever error message');
+					//else
 					resolve(new Class(attributes));
 				});
 			};
 
+			/*
+			** TODO :
+			** Should go in localStorage decorator
+			*/
 			Class.find = function find () {
 				//returns an array
-			};
-
-			Class.get = function get () {
-				//returns a promise or an object ?
 			};
 
 			/* !STATIC METHODS! */
