@@ -102,8 +102,33 @@
 				}
 			}/*! CLASS METHODS !*/
 			/*  DEFAULT INSTANCE METHOD  */
+			if (_reserved) {
+				Class.prototype.toJSON = function () {
+					var _obj = {};
+					for(var name in model.attributes)
+						_obj[name] = this[name]();
+					/* 
+					** TODO
+					** for collections and objects
+					*/
+					return JSON.stringify(_obj);
+				};
+				Class.prototype.update = function (obj) {
+					for(var name in model.attributes) {
+						if (obj[name])
+							this[name](obj[name]);
+					/* 
+					** TODO
+					** for collections and objects
+					*/
+					}
+				};
+			}
 			/*! DEFAULT INSTANCE METHOD !*/
 			/*  DEFAULT CLASS METHOD  */
+			if (_reserved) {
+
+			}
 			/*! DEFAULT CLASS METHOD !*/
 			/* KEEP AT THE END */
 			return Class;
