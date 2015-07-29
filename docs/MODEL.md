@@ -2,11 +2,11 @@
 ```javascript
 
 ```
-- [Introduction](/#Introduction)
-- [Attributes](/#Attributes)
-- [Collections](/#Collections)
-- [Methods](/#Methods)
-- [Config](/#Config)
+- [Introduction](#Introduction)
+- [Attributes](#Attributes)
+- [Collections](#Collections)
+- [Methods](#Methods)
+- [Config](#Config)
 
 ###Introduction
 #### A simple raft model :
