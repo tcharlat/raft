@@ -4,12 +4,21 @@ var Raft   = require('../../raft.js');
 var model = {
 	attributes: {
 		foo: {
-			default: 'bar'
+			default: 'bar',
+			is: {
+				true: function (value) {
+					return true
+				},
+				false: function (value) {
+					return false
+				}
+			}
 		},
 		baz: {
 
 		}
-	}
+	},
+	prefix: 'model'
 };
 
 var Constructor = Raft(model);
@@ -45,10 +54,10 @@ describe('raft', function () {
 			var instance = instanceOne;
 
 			it('should have foo property unchanged (bar)', function () {
-				instance.should.have.ownProperty('foo').obj().should.be.equal('bar');
+				instance.foo().should.be.equal('bar');
 			});
 			it('should have baz undefined', function () {
-				should(instance.should.have.ownProperty('baz').obj()).be.undefined();
+				should(instance.baz()).be.undefined();
 			});
 			it('instance.foo(42) and return 42', function () {
 				instance.foo(42).should.be.equal(42);
@@ -62,10 +71,10 @@ describe('raft', function () {
 			var instance = instanceTwo;
 
 			it('should have foo property changed (baz)', function () {
-				instance.should.have.ownProperty('foo').obj().should.be.equal('baz');
+				instance.foo().should.be.equal('baz');
 			});
 			it('should have baz undefined', function () {
-				should(instance.should.have.ownProperty('baz').obj()).be.undefined();
+				should(instance.baz()).be.undefined();
 			});
 		});
 
@@ -78,8 +87,40 @@ describe('raft', function () {
 
 			it('should return a stringify JSON object', function () {
 				should(instanceOne.toJSON()).be.String();
-			})
-		})
-	})
+			});
+		});
+
+		describe('model identity', function () {
+			var instance = instanceOne;
+
+			it('should return the model id (prefix)', function () {
+				instance.id().should.be.equal(model.prefix);
+			});
+
+			it('should return the model version (0)', function () {
+				instance.version().should.be.equal('0');
+			});
+		});
+	});
+
+	describe('attributes methods', function () {
+		var instance = instanceOne;
+
+		it('should have is methods on foo', function () {
+			instance.fooIstrue.should.be.Function();
+		});
+		it('should return the value of foo', function (done) {
+			instance.fooIstrue().then(function (ret) {
+				ret().should.be.equal(42);
+				done();
+			});
+		});
+		it('should be rejected', function (done) {
+			instance.fooIsfalse().catch(function (err) {
+				done();
+			});
+		});
+	});
+
 
 });
