@@ -1,6 +1,6 @@
 {
   "name": "raft",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/Kallikrein/raft",
   "description": "A lightweight JS class builder. With tools.",
   "main": "raft.js",
@@ -18,7 +18,8 @@
   ],
   "authors": [
     "Thomas Charlat",
-    "Joachim Westphal"
+    "Joachim Westphal",
+    "Nicolas Prigent"
   ],
   "license": "GPL-2.0",
   "ignore": [
