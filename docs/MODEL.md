@@ -1,5 +1,14 @@
 # Raft Models
 ```javascript
+var model = {
+	attributes: {},
+	collections: {},
+	methods: {},
+	//statics: {},
+	id: '',
+	version: '',
+	prefix: ''
+}
 
 ```
 - [Introduction](#Introduction)
@@ -141,5 +150,80 @@ Discussion:
 - as for the attribute 'is' method, the global 'is' could be clearer and simpler.
 
 ### Collections
+Your object can contain collections.
+A collection contains an array of typed objects, the model to create these objects and the model definition.
+It exposes an api of methods.
+
+Creating a collection:
+
+Let's create a new class 'Toto'. This class has a collection of 'Foo'
+```javascript
+var totoModel = {
+	attributes: {
+		toto: {
+			default: 'tata'
+		}
+	},
+	collections: {
+		fooCollection: {
+			type: Foo					// this constructor must be already built with raft
+		}
+	}
+};
+
+```
+
 ### Methods
+raft provides an api of methods, as detailed [here](./METHODS.md).
+You can (and should) define your own model-specific instance methods and class methods.
+
+#### Instance methods
+
+Instance methods, though defined in the model definition, will have access to 'this'.
+
+```javascript
+fooModel.methods = {
+	foobar: function () {
+		this._myVar = "I can access 'this' but should never modify my class definition for js optimization";
+		console.log(this.foo());
+		console.log(this.bar());
+	}
+};
+
+foobar = new factory(fooModel)();		//foobar._myVar undefined
+
+foobar.foobar();						//'bar' 'foo', foobar._myVar "I can access 'this'..."
+```
+#### Class methods
+
+Class methods are currently disabled in the current version, will be back soon...
+
+```javascript
+fooModel.statics = {
+	staticBar : function () {}
+}
+```
+TODO:
+warning if a reserved keyword is used
 ### Config
+
+####Id
+
+The 'id' field allows you to alias another attribute to be the unique identifier of an object.
+It's implemented as a ressource for decorators and for collection management.
+
+```javascript
+fooModel.id = 'bar';
+foobar = new factory(fooModel)({bar: 42});
+foobar.id();							//42
+foobar.id(43);							//43
+foobar.bar();							//43
+```
+Collections methods will, at some point, expose unique id management, and object updates based on identification.
+
+####Prefix
+```javascript
+fooModel.prefix = 'FOOBAR';
+```
+
+This config serves a typing purpose. It's used for error strings in 'is' methods, but also as prefix to id for localStorage key generation. (see my other [decorators](./DECORATING.md))
