@@ -108,5 +108,5 @@ raft-decorator-localStorage
 - backward incompatile semantics refactoring
 - tests
 - CI
-- Adaptors
-- collection attributes
+- ~~Adaptors~~
+- ~~collection attributes~~
