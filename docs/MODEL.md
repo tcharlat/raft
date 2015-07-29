@@ -11,11 +11,11 @@ var model = {
 }
 
 ```
-- [Introduction](#Introduction)
-- [Attributes](#Attributes)
-- [Collections](#Collections)
-- [Methods](#Methods)
-- [Config](#Config)
+- [Introduction](#introduction)
+- [Attributes](#attributes)
+- [Collections](#collections)
+- [Methods](#methods)
+- [Config](#config)
 
 ###Introduction
 #### A simple raft model :
