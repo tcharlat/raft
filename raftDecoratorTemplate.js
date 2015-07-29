@@ -1,6 +1,6 @@
 !function(env) {
 	'use strict';
-	if (typeof module != "undefined" && module !== null && module.exports) module.exports = <%= decorator %>;
+	if (typeof module != "undefined" && module !== null && module.exports) module.exports = <%= decorator %>();
 	else if (typeof define === "function" && define.amd) define(<%= decorator %>);
 	else env.<%= decorator %> = <%= decorator %>();
 

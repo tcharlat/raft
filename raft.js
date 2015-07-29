@@ -1,6 +1,6 @@
 !function(env) {
 	'use strict';
-	if (typeof module != "undefined" && module !== null && module.exports) module.exports = raft;
+	if (typeof module != "undefined" && module !== null && module.exports) module.exports = raft();
 	else if (typeof define === "function" && define.amd) define(raft);
 	else env.raft = raft();
 
