@@ -1,4 +1,7 @@
 {
+  "devDependencies": {
+   "mocha": "latest"
+ },
   "scripts": {
     "test": "mocha */*.js"
   }
