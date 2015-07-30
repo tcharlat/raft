@@ -1,6 +1,8 @@
 # raft
 A lightweight JS class builder. With tools.
 
+![build](https://travis-ci.org/Kallikrein/raft.svg?branch=mocha)
+
 ## what is raft  
 Raft is a lightweight JS class builder.
 It can be used in the browser and allows you to easily build class constructors from a simple model. 
