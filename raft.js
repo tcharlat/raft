@@ -93,57 +93,58 @@
 			var _isPromises = {};
 			/*! VARIABLES !*/
 			/*  ATTRIBUTES  */
-			for (var name in model.attributes) {
-				/*  GETTER SETTER  */
-				Class.prototype[name] = getterSetter(name);
-				/*! GETTER SETTER !*/
-				/*  IS  */
-				for (var method in model.attributes[name].is) {
-					var _nameIsMethod = [name, 'Is', method].join('');
-					/*  ATTRIBUTE IS METHOD  */
-					Class.prototype[_nameIsMethod] = attributeIsMethod(name, method);
-					/*! ATTRIBUTE IS METHOD !*/
-					/*  INSTANCE IS METHOD PUBLISH  */
-					if (_isPromises[method] == null)
-			 			_isPromises[method] = [];
-			 		_isPromises[method].push(Class.prototype[_nameIsMethod]);
-			 		/*!  INSTANCE IS METHOD PUBLISH !*/
-				}/*! IS !*/
-			}
-			/*  INSTANCE IS METHOD SUBS  */
-			for (var method in _isPromises)
-				Class.prototype[['is', method].join('')] = isMethod(_isPromises[method]);
-			/*! INSTANCE IS METHOD SUBS !*/
+			if (model.attributes) {
+				for (var name in model.attributes) {
+					/*  GETTER SETTER  */
+					Class.prototype[name] = getterSetter(name);
+					/*! GETTER SETTER !*/
+					/*  IS  */
+					for (var method in model.attributes[name].is) {
+						var _nameIsMethod = [name, 'Is', method].join('');
+						/*  ATTRIBUTE IS METHOD  */
+						Class.prototype[_nameIsMethod] = attributeIsMethod(name, method);
+						/*! ATTRIBUTE IS METHOD !*/
+						/*  INSTANCE IS METHOD PUBLISH  */
+						if (_isPromises[method] == null)
+				 			_isPromises[method] = [];
+				 		_isPromises[method].push(Class.prototype[_nameIsMethod]);
+				 		/*!  INSTANCE IS METHOD PUBLISH !*/
+					}/*! IS !*/
+				}
+				/*  INSTANCE IS METHOD SUBS  */
+				for (var method in _isPromises)
+					Class.prototype[['is', method].join('')] = isMethod(_isPromises[method]);
+				/*! INSTANCE IS METHOD SUBS !*/
 
-			/*  ATTRIBUTES FUNCTIONS  */
-			function isMethod (promiseArray) {
-				return function () {
-					var self = this;
-					return Promise.all(promiseArray.map(function (promise) {
-						return promise.bind(self)();
-					}));
-				};
-			}
-			function attributeIsMethod (varName, methodName) {
-				return function () {
-					var self = this;
-					return new Promise(function (resolve, reject) {
-						if (model.attributes[varName].is[methodName].bind(self, Class.prototype[varName].bind(self))())
-							resolve(Class.prototype[varName].bind(self));
-						else
-							reject(model.prefix + '/' + varName + ': \'' + self[varName]() + '\' is not ' + methodName);
-					});
-				};
-			}
-			function getterSetter(varName) {
-				return function(/*value*/) {
-					if (arguments.length)
-						this['_'+varName] = arguments[0];
-					return this['_'+varName];
-				};
-			}
-			/*! ATTRIBUTES FUNCTIONS !*/
-			/*! ATTRIBUTES !*/
+				/*  ATTRIBUTES FUNCTIONS  */
+				function isMethod (promiseArray) {
+					return function () {
+						var self = this;
+						return Promise.all(promiseArray.map(function (promise) {
+							return promise.bind(self)();
+						}));
+					};
+				}
+				function attributeIsMethod (varName, methodName) {
+					return function () {
+						var self = this;
+						return new Promise(function (resolve, reject) {
+							if (model.attributes[varName].is[methodName].bind(self, Class.prototype[varName].bind(self))())
+								resolve(Class.prototype[varName].bind(self));
+							else
+								reject(model.prefix + '/' + varName + ': \'' + self[varName]() + '\' is not ' + methodName);
+						});
+					};
+				}
+				function getterSetter(varName) {
+					return function(/*value*/) {
+						if (arguments.length)
+							this['_'+varName] = arguments[0];
+						return this['_'+varName];
+					};
+				}
+				/*! ATTRIBUTES FUNCTIONS !*/
+			}/*! ATTRIBUTES !*/
 			/*  OBJECTS  */
 			if (model.objects) {
 				for (var object in model.objects) {
@@ -192,7 +193,7 @@
 					for (var object in model.objects) {
 						_obj[object] = (model.objects[object].saveAsJson == true)
 							? this[object].toJSON()
-							: this[object].id();
+							: {id: this[object].id()};
 					}/*! OBJECTS !*/
 					return JSON.stringify(_obj);
 				};
