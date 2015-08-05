@@ -2,6 +2,7 @@
 A lightweight JS class builder. With tools.
 
 ![build](https://travis-ci.org/Kallikrein/raft.svg?branch=dev)
+[![Coverage Status](https://coveralls.io/repos/Kallikrein/raft/badge.svg?branch=master&service=github)](https://coveralls.io/github/Kallikrein/raft?branch=master)
 
 ## what is raft  
 Raft is a lightweight JS class builder.
